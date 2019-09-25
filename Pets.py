@@ -67,8 +67,7 @@ while action is True:
                                 if len(foodList) > 1 and foodList[1] == hatchingPotion:
                                     feed = food
                             else:
-                                feed = max(foodPreferenceList, key=foodPreferenceList.get)
-
+                                feed = max(foodInventory, key=foodInventory.get)
                             r = requests.post(
                                 "https://habitica.com/api/v3/user/feed/" + pet + "/" + feed,
                                 headers=auth_headers)
