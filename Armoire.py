@@ -19,3 +19,4 @@ def emptyArmoire():
 
 while emptyArmoire() is False:
     r = requests.post("https://habitica.com/api/v3/user/buy-armoire", headers=auth_headers)
+    print(r.json()['message'])
