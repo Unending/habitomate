@@ -49,7 +49,7 @@ def bossHP():
     return float(getParty().json()["data"]["quest"]["progress"]["hp"])
 
 
-# # QUEST CAST SPELLS
+# QUEST CAST SPELLS
 if quest != "" and not getParty().json()["data"]["quest"]["progress"]["collect"]:
     while (userMana >= 10 and (bossHP() - pendingDMG() > 0)):
         r = requests.post(
