@@ -13,7 +13,7 @@ auth_headers = {"x-api-user": HABITICA_USER, "x-api-key": HABITICA_TOKEN}
 
 
 def emptyArmoire():
-    r = requests.get("https://habitica.com/api/v4/user", headers=auth_headers)
+    r = requests.get("https://habitica.com/api/v3/user", headers=auth_headers)
     return r.json()["data"]["flags"]["armoireEmpty"]
 
 

@@ -11,7 +11,7 @@ HABITICA_USER = config.get("AUTH", "HABITICA_USER")
 HABITICA_TOKEN = config.get("AUTH", "HABITICA_TOKEN")
 auth_headers = {"x-api-user": HABITICA_USER, "x-api-key": HABITICA_TOKEN}
 
-r = requests.get("https://habitica.com/api/v4/user", headers=auth_headers)
+r = requests.get("https://habitica.com/api/v3/user", headers=auth_headers)
 hatchingPotionsInventory = r.json()["data"]["items"]["hatchingPotions"]
 petsInventory = r.json()["data"]["items"]["pets"]
 eggsInventory = r.json()["data"]["items"]["eggs"]

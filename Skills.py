@@ -15,20 +15,17 @@ spellId = "fireball"
 
 def getUP():
     return requests.get(
-        "https://habitica.com/api/v4/user",
-        headers=auth_headers)
+        "https://habitica.com/api/v3/user", headers=auth_headers)
 
 
 def getParty():
     return requests.get(
-        "https://habitica.com/api/v3/groups/party",
-        headers=auth_headers)
+        "https://habitica.com/api/v3/groups/party", headers=auth_headers)
 
 
 def targetId():
     r = requests.get(
-        "https://habitica.com/api/v3/tasks/user?type=dailys",
-        headers=auth_headers)
+        "https://habitica.com/api/v3/tasks/user?type=dailys", headers=auth_headers)
 
     tasks = {}
     for task in r.json()["data"]:
@@ -38,8 +35,8 @@ def targetId():
 
 
 userMana = float(getUP().json()["data"]["stats"]["mp"])
-quest = getParty().json()["data"]["quest"]["key"]
-
+quest = getParty().json()["data"]["quest"]
+quest_active = quest["active"]
 
 def pendingDMG():
     return float(getUP().json()["data"]["party"]["quest"]["progress"]["up"])
@@ -50,11 +47,10 @@ def bossHP():
 
 
 # QUEST CAST SPELLS
-if quest != "" and not getParty().json()["data"]["quest"]["progress"]["collect"]:
+if quest_active and not getParty().json()["data"]["quest"]["progress"]["collect"]:
     while (userMana >= 10 and (bossHP() - pendingDMG() > 0)):
         r = requests.post(
-            "https://habitica.com/api/v4/user/class/cast/" + spellId + "?targetId=" + targetId(),
-            headers=auth_headers)
+            "https://habitica.com/api/v3/user/class/cast/" + spellId + "?targetId=" + targetId(), headers=auth_headers)
         if r.status_code == 200:
             print("Casted spell \"" + spellId + "\"" + " (boss damage)")
             userMana -= 10
@@ -67,8 +63,7 @@ maxMP = float(getUP().json()["data"]["stats"]["maxMP"])
 
 while userMana > maxMP * 0.9:
     r = requests.post(
-        "https://habitica.com/api/v4/user/class/cast/" + spellId + "?targetId=" + targetId(),
-        headers=auth_headers)
+        "https://habitica.com/api/v3/user/class/cast/" + spellId + "?targetId=" + targetId(), headers=auth_headers)
     if r.status_code == 200:
         print("Casted spell \"" + spellId + "\"" + " (mana burnoff)")
         userMana -= 10
