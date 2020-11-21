@@ -3,6 +3,7 @@
 
 import requests
 import ConfigParser
+from utils import *
 
 config = ConfigParser.RawConfigParser()
 config.read("config.ini")
@@ -15,8 +16,10 @@ auth_headers = {"x-api-user": HABITICA_USER, "x-api-key": HABITICA_TOKEN}
 def emptyArmoire():
     r = requests.get("https://habitica.com/api/v3/user", headers=auth_headers)
     return r.json()["data"]["flags"]["armoireEmpty"]
+    rateLimit(r)
 
 
 while emptyArmoire() is False:
     r = requests.post("https://habitica.com/api/v3/user/buy-armoire", headers=auth_headers)
     print(r.json()['message'])
+    rateLimit(r)

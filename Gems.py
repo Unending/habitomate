@@ -3,6 +3,7 @@
 
 import requests
 import ConfigParser
+from utils import *
 
 config = ConfigParser.RawConfigParser()
 config.read("config.ini")
@@ -17,3 +18,4 @@ while returnMessage == "+1 Gem":
     r = requests.post("https://habitica.com/api/v3/user/purchase/gems/gem", headers=auth_headers)
     returnMessage = r.json()['message']
     print(returnMessage)
+    rateLimit(r)

@@ -3,6 +3,7 @@
 
 import requests
 import ConfigParser
+from utils import *
 
 config = ConfigParser.RawConfigParser()
 config.read("config.ini")
@@ -53,6 +54,7 @@ for egg in eggsInventory:
                         petTypeList[egg] = 1
                 if r.status_code >= 400:
                     print("Failed to hatch " + hatchingPotion + " " + egg + ": " + r.json()["message"])
+                rateLimit(r.headers)
 
             # FEED PETS
             if petTypeList[egg] >= 10:
@@ -78,3 +80,4 @@ for egg in eggsInventory:
                                 mountsInventory[pet] = "true"
                         if r.status_code >= 400:
                             print("Failed to feed " + hatchingPotion + " " + egg + ": " + r.json()["message"])
+                        rateLimit(r.headers)

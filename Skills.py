@@ -3,6 +3,9 @@
 
 import requests
 import ConfigParser
+import time
+
+from utils import *
 
 config = ConfigParser.RawConfigParser()
 config.read("config.ini")
@@ -14,18 +17,23 @@ spellId = "fireball"
 
 
 def getUP():
-    return requests.get(
+    r = requests.get(
         "https://habitica.com/api/v3/user", headers=auth_headers)
+    rateLimit(r)
+    return r
 
 
 def getParty():
-    return requests.get(
+    r = requests.get(
         "https://habitica.com/api/v3/groups/party", headers=auth_headers)
+    rateLimit(r)
+    return r
 
 
 def targetId():
     r = requests.get(
         "https://habitica.com/api/v3/tasks/user?type=dailys", headers=auth_headers)
+    rateLimit(r)
 
     tasks = {}
     for task in r.json()["data"]:
@@ -47,7 +55,7 @@ def bossHP():
 
 
 # QUEST CAST SPELLS
-if quest_active and not getParty().json()["data"]["quest"]["progress"]["collect"]:
+if quest_active and not quest["progress"]["collect"]:
     while (userMana >= 10 and (bossHP() - pendingDMG() > 0)):
         r = requests.post(
             "https://habitica.com/api/v3/user/class/cast/" + spellId + "?targetId=" + targetId(), headers=auth_headers)
@@ -56,6 +64,7 @@ if quest_active and not getParty().json()["data"]["quest"]["progress"]["collect"
             userMana -= 10
         if r.status_code >= 400:
             print("Failed to cast spell: " + r.json()["message"])
+        rateLimit(r)
     print("Boss HP remaining: " + str(max(0, round((bossHP() - pendingDMG())))))
 
 # MANA BURNOFF CAST SPELLS
@@ -69,5 +78,6 @@ while userMana > maxMP * 0.9:
         userMana -= 10
     if r.status_code >= 400:
         print("Failed to cast spell: " + r.json()["message"])
+    rateLimit(r)
 
 print("Mana remaining: " + str(round(userMana)))
