@@ -2,10 +2,10 @@
 # API docs: https://habitica.com/apidoc/
 
 import requests
-import ConfigParser
-from utils import *
+import configparser
+from utils import rateLimit
 
-config = ConfigParser.RawConfigParser()
+config = configparser.RawConfigParser()
 config.read("config.ini")
 
 HABITICA_USER = config.get("AUTH", "HABITICA_USER")

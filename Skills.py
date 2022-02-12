@@ -2,12 +2,11 @@
 # API docs: https://habitica.com/apidoc/
 
 import requests
-import ConfigParser
-import time
+import configparser
 
-from utils import *
+from utils import rateLimit
 
-config = ConfigParser.RawConfigParser()
+config = configparser.RawConfigParser()
 config.read("config.ini")
 
 HABITICA_USER = config.get("AUTH", "HABITICA_USER")
@@ -45,6 +44,7 @@ def targetId():
 userMana = float(getUP().json()["data"]["stats"]["mp"])
 quest = getParty().json()["data"]["quest"]
 quest_active = quest["active"]
+
 
 def pendingDMG():
     return float(getUP().json()["data"]["party"]["quest"]["progress"]["up"])
